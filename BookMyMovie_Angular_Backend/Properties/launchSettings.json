@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/test",
+      "launchUrl": "api/test/set-database",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "BookMyMovie_Angular_Backend": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/test",
+      "launchUrl": "api/test/set-database",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

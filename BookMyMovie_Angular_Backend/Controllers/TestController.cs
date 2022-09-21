@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookMyMovie_Angular_Backend.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace BookMyMovie_Angular_Backend.Controllers
 {
@@ -6,11 +9,22 @@ namespace BookMyMovie_Angular_Backend.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
-        // GET: api/<TestController>
+        BookMyMovieContext db = new BookMyMovieContext();
+
         [HttpGet]
+        [Route("set-database")]
         public IActionResult Get()
         {
-            return Ok("Hi Anshul Here!");
+            try
+            {
+                db.Database.ExecuteSqlInterpolated($"SetDB");
+            }
+            catch (Exception ex) {
+                return BadRequest("Error " + ex.InnerException.Message);
+            }
+            return Ok("Anshul have set the Database\n" +
+                "Keep Working\n" +
+                "All the Best");
         }
     }
 }
