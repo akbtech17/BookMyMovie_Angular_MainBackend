@@ -1,6 +1,8 @@
+using BookMyMovie_Angular_Backend.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,7 @@ namespace BookMyMovie_Angular_Backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<BookMyMovieContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("mycon")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
