@@ -17,6 +17,7 @@ namespace BookMyMovie_Angular_Backend.Models
         {
         }
 
+        public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Movie> Movies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,6 +32,34 @@ namespace BookMyMovie_Angular_Backend.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.ToTable("Customer");
+
+                entity.HasIndex(e => e.Email, "UQ__Customer__AB6E61641AFB7F98")
+                    .IsUnique();
+
+                entity.Property(e => e.CustomerId).HasColumnName("customerId");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("firstName");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("password");
+            });
 
             modelBuilder.Entity<Movie>(entity =>
             {
