@@ -17,6 +17,7 @@ namespace BookMyMovie_Angular_Backend.Models
         {
         }
 
+        public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Movie> Movies { get; set; }
 
@@ -33,11 +34,42 @@ namespace BookMyMovie_Angular_Backend.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<Admin>(entity =>
+            {
+                entity.HasKey(e => e.CustomerId)
+                    .HasName("PK__Admin__B611CB7D4A49A726");
+
+                entity.ToTable("Admin");
+
+                entity.HasIndex(e => e.Email, "UQ__Admin__AB6E6164A78B3970")
+                    .IsUnique();
+
+                entity.Property(e => e.CustomerId).HasColumnName("customerId");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("firstName");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("password");
+            });
+
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.ToTable("Customer");
 
-                entity.HasIndex(e => e.Email, "UQ__Customer__AB6E61641AFB7F98")
+                entity.HasIndex(e => e.Email, "UQ__Customer__AB6E61645652F9F1")
                     .IsUnique();
 
                 entity.Property(e => e.CustomerId).HasColumnName("customerId");
