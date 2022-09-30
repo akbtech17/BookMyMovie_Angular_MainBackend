@@ -1,5 +1,6 @@
 ﻿using BookMyMovie_Angular_Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -34,6 +35,22 @@ namespace BookMyMovie_Angular_Backend.Controllers
             {
                 var data = db.Movies.Find(id);
                 return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error " + ex.InnerException.Message);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult InsertMovie(Movie movie)
+        {
+            try
+            {
+                movie.MovieId = null;
+                db.Movies.Add(movie);
+                db.SaveChanges();
+                return Ok();
             }
             catch (Exception ex)
             {
