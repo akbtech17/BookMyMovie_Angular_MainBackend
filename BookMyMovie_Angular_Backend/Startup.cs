@@ -27,7 +27,7 @@ namespace BookMyMovie_Angular_Backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<BookMyMovieContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("mycon")));
+            services.AddDbContext<Db01Context>(opt => opt.UseSqlServer(Configuration.GetConnectionString("mycon")));
             services.AddCors();                             //Add CORS ---- Cross Origin Resourse Shard
         }
 

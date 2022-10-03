@@ -10,7 +10,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        BookMyMovieContext db = new BookMyMovieContext();
+        Db01Context db = new Db01Context();
 
         [HttpGet]
         [Route("")]
@@ -18,7 +18,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
         {
             try
             {
-                var data = db.Movies.ToList();
+                var data = db.Akbmovies.ToList();
                 return Ok(data);
             }
             catch (Exception ex)
@@ -33,7 +33,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
         {
             try
             {
-                var data = db.Movies.Find(id);
+                var data = db.Akbmovies.Find(id);
                 return Ok(data);
             }
             catch (Exception ex)
@@ -43,12 +43,12 @@ namespace BookMyMovie_Angular_Backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult InsertMovie(Movie movie)
+        public IActionResult InsertMovie(Akbmovie movie)
         {
             try
             {
                 movie.MovieId = null;
-                db.Movies.Add(movie);
+                db.Akbmovies.Add(movie);
                 db.SaveChanges();
                 return Ok();
             }
@@ -63,10 +63,10 @@ namespace BookMyMovie_Angular_Backend.Controllers
         public IActionResult DeleteMovie(int id) {
             try
             {
-                var data = db.Movies.Where(m => m.MovieId == id).FirstOrDefault();
+                var data = db.Akbmovies.Where(m => m.MovieId == id).FirstOrDefault();
                 if (data != null)
                 {
-                    db.Movies.Remove(data);
+                    db.Akbmovies.Remove(data);
                     db.SaveChanges();
                 }
                 return Ok();
@@ -81,7 +81,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
         {
             try
             {
-                var old_data = db.Movies.Where(m => m.MovieId == new_data.MovieId).FirstOrDefault();
+                var old_data = db.Akbmovies.Where(m => m.MovieId == new_data.MovieId).FirstOrDefault();
                 if (old_data != null)
                 {   
                     old_data.MovieName = new_data.MovieName;

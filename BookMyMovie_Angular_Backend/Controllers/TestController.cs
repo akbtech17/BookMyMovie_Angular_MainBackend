@@ -9,7 +9,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
-        BookMyMovieContext db = new BookMyMovieContext();
+        Db01Context db = new Db01Context();
 
         [HttpGet]
         [Route("set-database")]
@@ -17,7 +17,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
         {
             try
             {
-                db.Database.ExecuteSqlInterpolated($"SetDB");
+                db.Database.ExecuteSqlInterpolated($"AKBSetDB");
             }
             catch (Exception ex) {
                 return BadRequest("Error " + ex.InnerException.Message);

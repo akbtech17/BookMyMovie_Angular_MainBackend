@@ -11,7 +11,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        BookMyMovieContext db = new BookMyMovieContext();
+        Db01Context db = new Db01Context();
 
         [HttpPost]
         [Route("signin")]
@@ -19,7 +19,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
         {
             try
             {
-                var data = db.Admins.Where(c => c.Email.ToLower().Equals(query.email) && c.Password.Equals(query.password)).FirstOrDefault();
+                var data = db.Akbadmins.Where(c => c.Email.ToLower().Equals(query.email) && c.Password.Equals(query.password)).FirstOrDefault();
                 if (data == null)
                 {
                     return NotFound();

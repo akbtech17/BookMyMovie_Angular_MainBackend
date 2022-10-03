@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BookMyMovie_Angular_Backend.Models
 {
-    public partial class Movie
+    public partial class Akbmovie
     {
         public int? MovieId { get; set; }
         public string MovieName { get; set; }

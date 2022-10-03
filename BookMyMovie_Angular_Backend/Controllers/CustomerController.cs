@@ -11,14 +11,14 @@ namespace BookMyMovie_Angular_Backend.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        BookMyMovieContext db = new BookMyMovieContext();
+        Db01Context db = new Db01Context();
 
         [HttpPost]
         [Route("signin")]
         public IActionResult validateSignIn(Credentials query) {
             try
             {
-                var data = db.Customers.Where(c => c.Email.ToLower().Equals(query.email) && c.Password.Equals(query.password)).FirstOrDefault();
+                var data = db.Akbcustomers.Where(c => c.Email.ToLower().Equals(query.email) && c.Password.Equals(query.password)).FirstOrDefault();
                 if (data == null)
                 {
                     return NotFound();

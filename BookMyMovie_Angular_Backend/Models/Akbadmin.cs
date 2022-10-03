@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BookMyMovie_Angular_Backend.Models
 {
-    public partial class Customer
+    public partial class Akbadmin
     {
         public int CustomerId { get; set; }
         public string Email { get; set; }

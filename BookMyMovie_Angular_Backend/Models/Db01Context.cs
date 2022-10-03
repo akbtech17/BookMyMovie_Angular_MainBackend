@@ -6,27 +6,27 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BookMyMovie_Angular_Backend.Models
 {
-    public partial class BookMyMovieContext : DbContext
+    public partial class Db01Context : DbContext
     {
-        public BookMyMovieContext()
+        public Db01Context()
         {
         }
 
-        public BookMyMovieContext(DbContextOptions<BookMyMovieContext> options)
+        public Db01Context(DbContextOptions<Db01Context> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<Admin> Admins { get; set; }
-        public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Movie> Movies { get; set; }
+        public virtual DbSet<Akbadmin> Akbadmins { get; set; }
+        public virtual DbSet<Akbcustomer> Akbcustomers { get; set; }
+        public virtual DbSet<Akbmovie> Akbmovies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=.\\sqlexpress; database=BookMyMovie; trusted_connection=true;");
+                optionsBuilder.UseSqlServer("Server=tcp:cldazure.database.windows.net,1433;Initial Catalog=Db01;Persist Security Info=False;User ID=cldazure;Password=b@atch@12345!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -34,14 +34,14 @@ namespace BookMyMovie_Angular_Backend.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<Admin>(entity =>
+            modelBuilder.Entity<Akbadmin>(entity =>
             {
                 entity.HasKey(e => e.CustomerId)
-                    .HasName("PK__Admin__B611CB7D4A49A726");
+                    .HasName("PK__AKBAdmin__B611CB7D59EB8C0B");
 
-                entity.ToTable("Admin");
+                entity.ToTable("AKBAdmin");
 
-                entity.HasIndex(e => e.Email, "UQ__Admin__AB6E6164A78B3970")
+                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__AB6E6164BD81E4E1")
                     .IsUnique();
 
                 entity.Property(e => e.CustomerId).HasColumnName("customerId");
@@ -65,11 +65,14 @@ namespace BookMyMovie_Angular_Backend.Models
                     .HasColumnName("password");
             });
 
-            modelBuilder.Entity<Customer>(entity =>
+            modelBuilder.Entity<Akbcustomer>(entity =>
             {
-                entity.ToTable("Customer");
+                entity.HasKey(e => e.CustomerId)
+                    .HasName("PK__AKBCusto__B611CB7D74A0B4AD");
 
-                entity.HasIndex(e => e.Email, "UQ__Customer__AB6E61645652F9F1")
+                entity.ToTable("AKBCustomer");
+
+                entity.HasIndex(e => e.Email, "UQ__AKBCusto__AB6E6164BFC32537")
                     .IsUnique();
 
                 entity.Property(e => e.CustomerId).HasColumnName("customerId");
@@ -93,9 +96,12 @@ namespace BookMyMovie_Angular_Backend.Models
                     .HasColumnName("password");
             });
 
-            modelBuilder.Entity<Movie>(entity =>
+            modelBuilder.Entity<Akbmovie>(entity =>
             {
-                entity.ToTable("Movie");
+                entity.HasKey(e => e.MovieId)
+                    .HasName("PK__AKBMovie__42EB374EFB8B72C3");
+
+                entity.ToTable("AKBMovie");
 
                 entity.Property(e => e.MovieId).HasColumnName("movieId");
 
