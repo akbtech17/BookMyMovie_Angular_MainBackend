@@ -77,7 +77,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateMovie(Movie new_data)
+        public IActionResult UpdateMovie(Akbmovie new_data)
         {
             try
             {
