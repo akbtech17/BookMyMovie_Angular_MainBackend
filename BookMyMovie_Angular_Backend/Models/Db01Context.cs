@@ -37,14 +37,12 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbadmin>(entity =>
             {
                 entity.HasKey(e => e.AdminId)
-                    .HasName("PK__AKBAdmin__B611CB7D59EB8C0B");
+                    .HasName("PK__AKBAdmin__719FE48848C88DB0");
 
                 entity.ToTable("AKBAdmin");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__AB6E6164BD81E4E1")
+                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__AB6E6164E42577E8")
                     .IsUnique();
-
-                entity.Property(e => e.AdminId).HasColumnName("customerId");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -68,11 +66,11 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbcustomer>(entity =>
             {
                 entity.HasKey(e => e.CustomerId)
-                    .HasName("PK__AKBCusto__B611CB7D74A0B4AD");
+                    .HasName("PK__AKBCusto__B611CB7D48D5148E");
 
                 entity.ToTable("AKBCustomer");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBCusto__AB6E6164BFC32537")
+                entity.HasIndex(e => e.Email, "UQ__AKBCusto__AB6E6164D545331F")
                     .IsUnique();
 
                 entity.Property(e => e.CustomerId).HasColumnName("customerId");
@@ -99,7 +97,7 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbmovie>(entity =>
             {
                 entity.HasKey(e => e.MovieId)
-                    .HasName("PK__AKBMovie__42EB374EFB8B72C3");
+                    .HasName("PK__AKBMovie__42EB374E75DEC6F4");
 
                 entity.ToTable("AKBMovie");
 
