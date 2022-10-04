@@ -7,7 +7,7 @@ namespace BookMyMovie_Angular_Backend.Models
 {
     public partial class Akbadmin
     {
-        public int CustomerId { get; set; }
+        public int AdminId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }

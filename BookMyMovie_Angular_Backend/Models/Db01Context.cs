@@ -36,7 +36,7 @@ namespace BookMyMovie_Angular_Backend.Models
 
             modelBuilder.Entity<Akbadmin>(entity =>
             {
-                entity.HasKey(e => e.CustomerId)
+                entity.HasKey(e => e.AdminId)
                     .HasName("PK__AKBAdmin__B611CB7D59EB8C0B");
 
                 entity.ToTable("AKBAdmin");
@@ -44,7 +44,7 @@ namespace BookMyMovie_Angular_Backend.Models
                 entity.HasIndex(e => e.Email, "UQ__AKBAdmin__AB6E6164BD81E4E1")
                     .IsUnique();
 
-                entity.Property(e => e.CustomerId).HasColumnName("customerId");
+                entity.Property(e => e.AdminId).HasColumnName("customerId");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
