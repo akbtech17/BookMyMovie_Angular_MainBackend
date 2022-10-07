@@ -20,6 +20,7 @@ namespace BookMyMovie_Angular_Backend.Models
         public virtual DbSet<Akbadmin> Akbadmins { get; set; }
         public virtual DbSet<Akbcustomer> Akbcustomers { get; set; }
         public virtual DbSet<Akbmovie> Akbmovies { get; set; }
+        public virtual DbSet<AkbseatMap> AkbseatMaps { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -37,11 +38,11 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbadmin>(entity =>
             {
                 entity.HasKey(e => e.AdminId)
-                    .HasName("PK__AKBAdmin__719FE48848C88DB0");
+                    .HasName("PK__AKBAdmin__719FE4886F70186D");
 
                 entity.ToTable("AKBAdmin");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__AB6E6164E42577E8")
+                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__AB6E61642043284E")
                     .IsUnique();
 
                 entity.Property(e => e.Email)
@@ -58,7 +59,7 @@ namespace BookMyMovie_Angular_Backend.Models
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(20)
+                    .HasMaxLength(200)
                     .IsUnicode(false)
                     .HasColumnName("password");
             });
@@ -66,11 +67,11 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbcustomer>(entity =>
             {
                 entity.HasKey(e => e.CustomerId)
-                    .HasName("PK__AKBCusto__B611CB7D48D5148E");
+                    .HasName("PK__AKBCusto__B611CB7DEDCAE740");
 
                 entity.ToTable("AKBCustomer");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBCusto__AB6E6164D545331F")
+                entity.HasIndex(e => e.Email, "UQ__AKBCusto__AB6E61641B73A7E9")
                     .IsUnique();
 
                 entity.Property(e => e.CustomerId).HasColumnName("customerId");
@@ -89,7 +90,7 @@ namespace BookMyMovie_Angular_Backend.Models
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(20)
+                    .HasMaxLength(200)
                     .IsUnicode(false)
                     .HasColumnName("password");
             });
@@ -97,7 +98,7 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbmovie>(entity =>
             {
                 entity.HasKey(e => e.MovieId)
-                    .HasName("PK__AKBMovie__42EB374E75DEC6F4");
+                    .HasName("PK__AKBMovie__42EB374EC3CC6C5B");
 
                 entity.ToTable("AKBMovie");
 
@@ -152,6 +153,20 @@ namespace BookMyMovie_Angular_Backend.Models
                 entity.Property(e => e.ShowTime)
                     .HasColumnType("datetime")
                     .HasColumnName("showTime");
+            });
+
+            modelBuilder.Entity<AkbseatMap>(entity =>
+            {
+                entity.HasKey(e => new { e.MovieId, e.SeatNo })
+                    .HasName("PK_SeatMap");
+
+                entity.ToTable("AKBSeatMap");
+
+                entity.Property(e => e.SeatNo)
+                    .HasMaxLength(2)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
             });
 
             OnModelCreatingPartial(modelBuilder);
