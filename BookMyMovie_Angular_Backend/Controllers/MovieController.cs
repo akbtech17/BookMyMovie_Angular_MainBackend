@@ -112,5 +112,20 @@ namespace BookMyMovie_Angular_Backend.Controllers
 				return BadRequest("Error " + ex.InnerException.Message);
 			}
 		}
+
+        [HttpGet]
+        [Route("seatmap/{movieId}")]
+        public IActionResult GetSeatMapOfMovieByMovieId(int movieId)
+        {
+            try
+            {
+                var seatMap = db.AkbseatMaps.Where(seat => seat.MovieId == movieId).Select(seatDetails => new { seatDetails.SeatNo, seatDetails.Status});
+                return Ok(seatMap);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
+        }
 	}
 }
