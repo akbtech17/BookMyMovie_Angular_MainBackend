@@ -29,6 +29,23 @@ namespace BookMyMovie_Angular_Backend.Controllers
                 return BadRequest(ex.InnerException.Message);
             }
         }
+
+        [HttpPost]
+        [Route("register")]
+        public IActionResult register(Akbcustomer customer)
+        {
+            try
+            {
+                customer.CustomerId = null;
+                db.Akbcustomers.Add(customer);
+                db.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
+        }
     }
 
     public class Credentials
