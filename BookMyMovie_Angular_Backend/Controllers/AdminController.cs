@@ -28,5 +28,5 @@ namespace BookMyMovie_Angular_Backend.Controllers
                 return BadRequest(ex.InnerException.Message);
             }
         }
-    }
+	}
 }
