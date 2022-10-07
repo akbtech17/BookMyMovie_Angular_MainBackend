@@ -1,7 +1,7 @@
 ﻿using BookMyMovie_Angular_Backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BookMyMovie_Angular_Backend.Controllers
@@ -14,28 +14,29 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
         [HttpGet]
         [Route("")]
-        public IActionResult Get()
+        public IActionResult GetMovieList()
         {
             try
             {
-                var data = db.Akbmovies.ToList();
-                return Ok(data);
+                List<Akbmovie> movies = db.Akbmovies.ToList();
+                return Ok(movies);
             }
             catch (Exception ex)
             {
-                return BadRequest("Error " + ex.InnerException.Message);
+                return BadRequest(ex.InnerException.Message);
             }
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult GetMovieDetailsById(int movieId)
         {
             try
             {
-                var data = db.Akbmovies.Find(id);
-                return Ok(data);
-            }
+                Akbmovie movieDetails = db.Akbmovies.Find(movieId);
+                if(movieDetails != null) return Ok(movieDetails);
+                return NotFound();
+			}
             catch (Exception ex)
             {
                 return BadRequest("Error " + ex.InnerException.Message);
@@ -43,66 +44,73 @@ namespace BookMyMovie_Angular_Backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult InsertMovie(Akbmovie movie)
+        public IActionResult AddMovie(Akbmovie movieDetails)
         {
             try
             {
-                movie.MovieId = null;
-                db.Akbmovies.Add(movie);
+                movieDetails.MovieId = null;
+                db.Akbmovies.Add(movieDetails);
                 db.SaveChanges();
                 return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest("Error " + ex.InnerException.Message);
-            }
-        }
-
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteMovie(int id) {
-            try
-            {
-                var data = db.Akbmovies.Where(m => m.MovieId == id).FirstOrDefault();
-                if (data != null)
-                {
-                    db.Akbmovies.Remove(data);
-                    db.SaveChanges();
-                }
-                return Ok();
-            }
-            catch (Exception ex) {
-                return BadRequest("Error " + ex.InnerException.Message);
+                return BadRequest(ex.InnerException.Message);
             }
         }
 
         [HttpPut]
-        public IActionResult UpdateMovie(Akbmovie new_data)
+        public IActionResult UpdateMovie(Akbmovie movieDetails)
         {
             try
             {
-                var old_data = db.Akbmovies.Where(m => m.MovieId == new_data.MovieId).FirstOrDefault();
-                if (old_data != null)
+                Akbmovie movieOldDetails = db.Akbmovies
+                    .Where(m => m.MovieId == movieDetails.MovieId)
+                    .FirstOrDefault();
+                if (movieOldDetails != null)
                 {   
-                    old_data.MovieName = new_data.MovieName;
-                    old_data.ReleaseDate = new_data.ReleaseDate; 
-                    old_data.Ratings = new_data.Ratings; 
-                    old_data.Genres = new_data.Genres; 
-                    old_data.ImageUrl = new_data.ImageUrl; 
-                    old_data.CostPerSeat = new_data.CostPerSeat; 
-                    old_data.ShowTime = new_data.ShowTime;
-                    old_data.Duration = new_data.Duration;
-                    old_data.AgeRating = new_data.AgeRating;
-                    old_data.Language = new_data.Language;
-                    old_data.MovieType = new_data.MovieType;
+                    movieOldDetails.MovieName = movieDetails.MovieName;
+                    movieOldDetails.ReleaseDate = movieDetails.ReleaseDate; 
+                    movieOldDetails.Ratings = movieDetails.Ratings; 
+                    movieOldDetails.Genres = movieDetails.Genres; 
+                    movieOldDetails.ImageUrl = movieDetails.ImageUrl; 
+                    movieOldDetails.CostPerSeat = movieDetails.CostPerSeat; 
+                    movieOldDetails.ShowTime = movieDetails.ShowTime;
+                    movieOldDetails.Duration = movieDetails.Duration;
+                    movieOldDetails.AgeRating = movieDetails.AgeRating;
+                    movieOldDetails.Language = movieDetails.Language;
+                    movieOldDetails.MovieType = movieDetails.MovieType;
                 }
                 db.SaveChanges();
                 return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest("Error " + ex.InnerException.Message);
+                return BadRequest(ex.InnerException.Message);
             }
         }
-    }
+
+		[HttpDelete]
+		[Route("{id}")]
+		public IActionResult DeleteMovie(int id)
+		{
+			try
+			{
+				Akbmovie movieDetails = db.Akbmovies
+					.Where(m => m.MovieId == id)
+					.FirstOrDefault();
+
+				if (movieDetails != null)
+				{
+					db.Akbmovies.Remove(movieDetails);
+					db.SaveChanges();
+				}
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest("Error " + ex.InnerException.Message);
+			}
+		}
+	}
 }

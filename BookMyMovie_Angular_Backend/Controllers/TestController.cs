@@ -13,7 +13,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
 		[HttpGet]
 		[Route("set-database")]
-		public IActionResult Get()
+		public IActionResult SetDatabase()
 		{
 			try
 			{
@@ -21,7 +21,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			}
 			catch (Exception ex)
 			{
-				return BadRequest("Error " + ex.InnerException.Message);
+				return BadRequest(ex.InnerException.Message);
 			}
 			return Ok("Anshul have set the Database\n" +
 				"Keep Working\n" +

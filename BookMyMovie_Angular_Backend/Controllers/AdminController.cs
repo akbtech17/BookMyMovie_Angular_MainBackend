@@ -13,13 +13,12 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
         [HttpPost]
         [Route("signin")]
-        public IActionResult ValidateSignIn(Credentials query)
+        public IActionResult ValidateSignIn(Credentials creds)
         {
             try
             {
                 Akbadmin adminData = db.Akbadmins
-                    .Where(c => c.Email.ToLower().Equals(query.email) && c.Password
-                    .Equals(query.password))
+                    .Where(c => c.Email.ToLower().Equals(creds.Email) && c.Password.Equals(creds.Password))
                     .FirstOrDefault();
                 if (adminData == null) return NotFound();
                 return Ok(adminData);

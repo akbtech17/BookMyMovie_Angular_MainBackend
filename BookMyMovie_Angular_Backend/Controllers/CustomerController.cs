@@ -1,8 +1,6 @@
 ﻿using BookMyMovie_Angular_Backend.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace BookMyMovie_Angular_Backend.Controllers
@@ -15,15 +13,14 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
         [HttpPost]
         [Route("signin")]
-        public IActionResult validateSignIn(Credentials query) {
+        public IActionResult ValidateSignIn(Credentials query) {
             try
             {
-                var data = db.Akbcustomers.Where(c => c.Email.ToLower().Equals(query.email) && c.Password.Equals(query.password)).FirstOrDefault();
-                if (data == null)
-                {
-                    return NotFound();
-                }
-                return Ok(data);
+                Akbcustomer customerData = db.Akbcustomers
+                    .Where(c => c.Email.ToLower().Equals(query.Email) && c.Password.Equals(query.Password))
+                    .FirstOrDefault();
+                if (customerData == null) return NotFound();
+                return Ok(customerData);
             }
             catch (Exception ex) {
                 return BadRequest(ex.InnerException.Message);
@@ -32,12 +29,12 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
         [HttpPost]
         [Route("register")]
-        public IActionResult register(Akbcustomer customer)
+        public IActionResult Register(Akbcustomer customerData)
         {
             try
             {
-                customer.CustomerId = null;
-                db.Akbcustomers.Add(customer);
+                customerData.CustomerId = null;
+                db.Akbcustomers.Add(customerData);
                 db.SaveChanges();
                 return Ok();
             }
@@ -50,7 +47,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
     public class Credentials
     {
-        public string email { get; set; }
-        public string password { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }
