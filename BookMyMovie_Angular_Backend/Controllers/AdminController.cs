@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace BookMyMovie_Angular_Backend.Controllers
 {
     [Route("api/[controller]")]
@@ -15,16 +13,16 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
         [HttpPost]
         [Route("signin")]
-        public IActionResult validateSignIn(Credentials query)
+        public IActionResult ValidateSignIn(Credentials query)
         {
             try
             {
-                var data = db.Akbadmins.Where(c => c.Email.ToLower().Equals(query.email) && c.Password.Equals(query.password)).FirstOrDefault();
-                if (data == null)
-                {
-                    return NotFound();
-                }
-                return Ok(data);
+                Akbadmin adminData = db.Akbadmins
+                    .Where(c => c.Email.ToLower().Equals(query.email) && c.Password
+                    .Equals(query.password))
+                    .FirstOrDefault();
+                if (adminData == null) return NotFound();
+                return Ok(adminData);
             }
             catch (Exception ex)
             {
