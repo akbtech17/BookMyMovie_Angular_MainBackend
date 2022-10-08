@@ -14,7 +14,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
 		[HttpPost]
 		[Route("")]
-		public IActionResult CreateTransaction()
+		public IActionResult CreateTransaction(TransactionDetails transactionDetails)
 		{
 			try
 			{
@@ -36,5 +36,19 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			CloudQueueMessage queueMessage = new CloudQueueMessage(message);
 			cloudQueue.AddMessageAsync(queueMessage);
 		}
+	}
+
+	public class TransactionDetails 
+	{
+		public string firstName { get; set; }
+		public string email { get; set; }
+		public int movieId { get; set; }
+		public string movieName { get; set; }
+		public DateTime showTime { get; set; }
+		public int seatCost { get; set; }
+		public string[] selectedSeats { get; set; }
+		public int noOfSelectedSeats { get; set; }
+		public int totalCost { get; set; }
+
 	}
 }
