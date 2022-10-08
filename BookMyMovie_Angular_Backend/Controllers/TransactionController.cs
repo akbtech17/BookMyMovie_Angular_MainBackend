@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using System;
+using System.Linq;
 
 namespace BookMyMovie_Angular_Backend.Controllers
 {
@@ -18,7 +19,19 @@ namespace BookMyMovie_Angular_Backend.Controllers
 		{
 			try
 			{
-				string message = "Hi, Anshul first message to queue";
+				string seatsBooked = "";
+				for (int i = 0; i < transactionDetails.selectedSeats.Length; i++)
+				{
+					seatsBooked+=transactionDetails.selectedSeats[i];
+					if (i + 1 < transactionDetails.selectedSeats.Length) seatsBooked+= ", ";
+				}
+				string message = $"Name : {transactionDetails.firstName}\n" +
+					$"Email : {transactionDetails.email}\n" +
+					$"Seat No : {seatsBooked}\n" +
+					$"No of Seats : {transactionDetails.noOfSelectedSeats}\n" +
+					$"Total Cost : {transactionDetails.totalCost}\n" +
+					$"Movie Name : {transactionDetails.movieName}\n" +
+					$"Show Time : {transactionDetails.showTime}";
 				AddMessageToQueue(message);
 			}
 			catch (Exception ex) 
@@ -32,7 +45,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 		{
 			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connAzureStorage);
 			CloudQueueClient cloudQueueClient = storageAccount.CreateCloudQueueClient();
-			CloudQueue cloudQueue = cloudQueueClient.GetQueueReference("myqueue");
+			CloudQueue cloudQueue = cloudQueueClient.GetQueueReference("transactions");
 			CloudQueueMessage queueMessage = new CloudQueueMessage(message);
 			cloudQueue.AddMessageAsync(queueMessage);
 		}
