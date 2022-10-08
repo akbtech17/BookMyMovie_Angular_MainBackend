@@ -7,6 +7,12 @@ namespace BookMyMovie_Angular_Backend.Models
 {
     public partial class Akbmovie
     {
+        public Akbmovie()
+        {
+            AkbseatMaps = new HashSet<AkbseatMap>();
+            Akbtdets = new HashSet<Akbtdet>();
+        }
+
         public int? MovieId { get; set; }
         public string MovieName { get; set; }
         public DateTime? ReleaseDate { get; set; }
@@ -19,5 +25,8 @@ namespace BookMyMovie_Angular_Backend.Models
         public string AgeRating { get; set; }
         public string Language { get; set; }
         public string MovieType { get; set; }
+
+        public virtual ICollection<AkbseatMap> AkbseatMaps { get; set; }
+        public virtual ICollection<Akbtdet> Akbtdets { get; set; }
     }
 }

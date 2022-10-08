@@ -21,6 +21,7 @@ namespace BookMyMovie_Angular_Backend.Models
         public virtual DbSet<Akbcustomer> Akbcustomers { get; set; }
         public virtual DbSet<Akbmovie> Akbmovies { get; set; }
         public virtual DbSet<AkbseatMap> AkbseatMaps { get; set; }
+        public virtual DbSet<Akbtdet> Akbtdets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -38,121 +39,96 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbadmin>(entity =>
             {
                 entity.HasKey(e => e.AdminId)
-                    .HasName("PK__AKBAdmin__719FE4886F70186D");
+                    .HasName("PK__AKBAdmin__719FE48811536A10");
 
                 entity.ToTable("AKBAdmin");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__AB6E61642043284E")
+                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__A9D1053432BD368C")
                     .IsUnique();
 
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(30)
-                    .IsUnicode(false)
-                    .HasColumnName("email");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("firstName");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(200)
-                    .IsUnicode(false)
-                    .HasColumnName("password");
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Akbcustomer>(entity =>
             {
                 entity.HasKey(e => e.CustomerId)
-                    .HasName("PK__AKBCusto__B611CB7DEDCAE740");
+                    .HasName("PK__AKBCusto__A4AE64D8E2210672");
 
                 entity.ToTable("AKBCustomer");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBCusto__AB6E61641B73A7E9")
+                entity.HasIndex(e => e.Email, "UQ__AKBCusto__A9D10534C47C9CEC")
                     .IsUnique();
-
-                entity.Property(e => e.CustomerId).HasColumnName("customerId");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(30)
-                    .IsUnicode(false)
-                    .HasColumnName("email");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("firstName");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(200)
-                    .IsUnicode(false)
-                    .HasColumnName("password");
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Akbmovie>(entity =>
             {
                 entity.HasKey(e => e.MovieId)
-                    .HasName("PK__AKBMovie__42EB374EC3CC6C5B");
+                    .HasName("PK__AKBMovie__4BD2941A632096FA");
 
                 entity.ToTable("AKBMovie");
 
-                entity.Property(e => e.MovieId).HasColumnName("movieId");
-
                 entity.Property(e => e.AgeRating)
                     .HasMaxLength(4)
-                    .IsUnicode(false)
-                    .HasColumnName("ageRating");
+                    .IsUnicode(false);
 
-                entity.Property(e => e.CostPerSeat)
-                    .HasColumnName("costPerSeat")
-                    .HasDefaultValueSql("((250))");
+                entity.Property(e => e.CostPerSeat).HasDefaultValueSql("((250))");
 
                 entity.Property(e => e.Duration)
                     .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("duration");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Genres)
                     .HasMaxLength(200)
-                    .IsUnicode(false)
-                    .HasColumnName("genres");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.ImageUrl)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("imageUrl");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Language)
                     .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("language");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.MovieName)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("movieName");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.MovieType)
                     .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("movieType");
+                    .IsUnicode(false);
 
-                entity.Property(e => e.Ratings).HasColumnName("ratings");
+                entity.Property(e => e.ReleaseDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ReleaseDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("releaseDate");
-
-                entity.Property(e => e.ShowTime)
-                    .HasColumnType("datetime")
-                    .HasColumnName("showTime");
+                entity.Property(e => e.ShowTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<AkbseatMap>(entity =>
@@ -167,6 +143,32 @@ namespace BookMyMovie_Angular_Backend.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Movie)
+                    .WithMany(p => p.AkbseatMaps)
+                    .HasForeignKey(d => d.MovieId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__AKBSeatMa__Movie__415A6496");
+            });
+
+            modelBuilder.Entity<Akbtdet>(entity =>
+            {
+                entity.HasKey(e => e.TransactionId)
+                    .HasName("PK__AKBTDet__55433A6B82A5DF11");
+
+                entity.ToTable("AKBTDet");
+
+                entity.Property(e => e.TransactionTime).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Akbtdets)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK__AKBTDet__Custome__452AF57A");
+
+                entity.HasOne(d => d.Movie)
+                    .WithMany(p => p.Akbtdets)
+                    .HasForeignKey(d => d.MovieId)
+                    .HasConstraintName("FK__AKBTDet__MovieId__461F19B3");
             });
 
             OnModelCreatingPartial(modelBuilder);
