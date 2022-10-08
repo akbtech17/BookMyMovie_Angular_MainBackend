@@ -10,6 +10,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 	public class TestController : ControllerBase
 	{
 		Db01Context db = new Db01Context();
+		CustomerController customerController = new CustomerController();
 
 		[HttpGet]
 		[Route("set-database")]
@@ -18,6 +19,11 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			try
 			{
 				db.Database.ExecuteSqlInterpolated($"AKBSetDB");
+				Akbcustomer customer1 = new Akbcustomer();
+				customer1.Email = "akb.tech17@gmail.com";
+				customer1.Password = "12@usT34";
+				customer1.FirstName = "Anshul";
+				customerController.Register(customer1);
 			}
 			catch (Exception ex)
 			{

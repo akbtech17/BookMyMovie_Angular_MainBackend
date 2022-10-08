@@ -28,14 +28,14 @@ namespace BookMyMovie_Angular_Backend.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public IActionResult GetMovieDetailsById(int movieId)
+        [Route("{movieId}")]
+        public IActionResult GetMovieDetails(int movieId)
         {
             try
             {
-                Akbmovie movieDetails = db.Akbmovies.Find(movieId);
-                if(movieDetails != null) return Ok(movieDetails);
-                return NotFound();
+                Akbmovie movieDetails = db.Akbmovies.Where(movie => movie.MovieId == movieId).FirstOrDefault();
+                if (movieDetails == null) return NotFound();
+                return Ok(movieDetails);
 			}
             catch (Exception ex)
             {
