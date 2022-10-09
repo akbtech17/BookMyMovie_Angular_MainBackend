@@ -13,7 +13,7 @@ namespace BookMyMovie_Angular_Backend.Models
             AkbtransactionDetails = new HashSet<AkbtransactionDetail>();
         }
 
-        public int? MovieId { get; set; }
+        public int MovieId { get; set; }
         public string MovieName { get; set; }
         public DateTime? ReleaseDate { get; set; }
         public int? Ratings { get; set; }
