@@ -32,7 +32,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
 		[HttpGet]
 		[Route("{transactionId}")]
-		public IActionResult GetTransactionByTId(int transactionId) {
+		public IActionResult GetTransactionByTId(int? transactionId) {
 			try
 			{
 				TransactionResponse transactionResponse = new TransactionResponse();
@@ -79,6 +79,53 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			return Ok();
 		}
 
+		public TransactionResponse HelpPostTransaction(int? transactionId)
+		{
+			try
+			{
+				TransactionResponse transactionResponse = new TransactionResponse();
+
+				AkbtransactionDetail transactionDetails = db.AkbtransactionDetails.FirstOrDefault(transaction => transaction.TransactionId == transactionId);
+				transactionResponse.TransactionTime = transactionDetails.TransactionTime;
+				transactionResponse.TransactionId = transactionDetails.TransactionId;
+
+
+				Akbmovie movieDetails = db.Akbmovies.FirstOrDefault(movie => movie.MovieId == transactionDetails.MovieId);
+				transactionResponse.MovieId = movieDetails.MovieId;
+				transactionResponse.MovieName = movieDetails.MovieName;
+				transactionResponse.ReleaseDate = movieDetails.ReleaseDate;
+				transactionResponse.Ratings = movieDetails.Ratings;
+				transactionResponse.Genres = movieDetails.Genres;
+				transactionResponse.ImageUrl = movieDetails.ImageUrl;
+				transactionResponse.CostPerSeat = movieDetails.CostPerSeat;
+				transactionResponse.ShowTime = movieDetails.ShowTime;
+				transactionResponse.Duration = movieDetails.Duration;
+				transactionResponse.AgeRating = movieDetails.AgeRating;
+				transactionResponse.Language = movieDetails.Language;
+				transactionResponse.MovieType = movieDetails.MovieType;
+
+				Akbcustomer customerDetails = db.Akbcustomers.FirstOrDefault(customer => customer.CustomerId == transactionDetails.CustomerId);
+				transactionResponse.CustomerId = customerDetails.CustomerId;
+				transactionResponse.Email = customerDetails.Email;
+				transactionResponse.FirstName = customerDetails.FirstName;
+
+				List<AkbtransactionSeat> tranSeats = db.AkbtransactionSeats.Where(ts => ts.TransactionId == transactionId).ToList();
+				transactionResponse.Seats = new string[tranSeats.Count];
+				int cnt = 0;
+				foreach (AkbtransactionSeat seat in tranSeats)
+				{
+					transactionResponse.Seats[cnt++] = seat.SeatNo;
+				}
+
+				transactionResponse.TotalCost = cnt * transactionResponse.CostPerSeat;
+				return transactionResponse;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+		}
+
 		[HttpPost]
 		[Route("")]
 		public IActionResult CreateTransaction(TransactionRequest transactionRequest)
@@ -109,13 +156,14 @@ namespace BookMyMovie_Angular_Backend.Controllers
 						db.SaveChanges();
 					}
 				}
+				return Ok(HelpPostTransaction(transactionId));
 			}
 			catch (Exception ex)
 			{
 				return BadRequest();
 			}
 			
-			return Ok();
+			
 		}
 	}
 	public class TransactionRequest 
