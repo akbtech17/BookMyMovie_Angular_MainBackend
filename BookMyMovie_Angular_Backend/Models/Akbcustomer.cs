@@ -9,7 +9,7 @@ namespace BookMyMovie_Angular_Backend.Models
     {
         public Akbcustomer()
         {
-            Akbtdets = new HashSet<Akbtdet>();
+            AkbtransactionDetails = new HashSet<AkbtransactionDetail>();
         }
 
         public int? CustomerId { get; set; }
@@ -17,6 +17,6 @@ namespace BookMyMovie_Angular_Backend.Models
         public string Password { get; set; }
         public string FirstName { get; set; }
 
-        public virtual ICollection<Akbtdet> Akbtdets { get; set; }
+        public virtual ICollection<AkbtransactionDetail> AkbtransactionDetails { get; set; }
     }
 }

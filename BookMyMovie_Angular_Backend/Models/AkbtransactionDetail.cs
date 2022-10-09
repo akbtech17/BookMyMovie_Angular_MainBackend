@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace BookMyMovie_Angular_Backend.Models
 {
-    public partial class Akbtdet
+    public partial class AkbtransactionDetail
     {
-        public int? TransactionId { get; set; }
+        public int TransactionId { get; set; }
         public int? CustomerId { get; set; }
         public int? MovieId { get; set; }
         public DateTime TransactionTime { get; set; }

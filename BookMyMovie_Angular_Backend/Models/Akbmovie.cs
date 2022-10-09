@@ -10,7 +10,7 @@ namespace BookMyMovie_Angular_Backend.Models
         public Akbmovie()
         {
             AkbseatMaps = new HashSet<AkbseatMap>();
-            Akbtdets = new HashSet<Akbtdet>();
+            AkbtransactionDetails = new HashSet<AkbtransactionDetail>();
         }
 
         public int? MovieId { get; set; }
@@ -27,6 +27,6 @@ namespace BookMyMovie_Angular_Backend.Models
         public string MovieType { get; set; }
 
         public virtual ICollection<AkbseatMap> AkbseatMaps { get; set; }
-        public virtual ICollection<Akbtdet> Akbtdets { get; set; }
+        public virtual ICollection<AkbtransactionDetail> AkbtransactionDetails { get; set; }
     }
 }

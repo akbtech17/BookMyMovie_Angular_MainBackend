@@ -21,7 +21,7 @@ namespace BookMyMovie_Angular_Backend.Models
         public virtual DbSet<Akbcustomer> Akbcustomers { get; set; }
         public virtual DbSet<Akbmovie> Akbmovies { get; set; }
         public virtual DbSet<AkbseatMap> AkbseatMaps { get; set; }
-        public virtual DbSet<Akbtdet> Akbtdets { get; set; }
+        public virtual DbSet<AkbtransactionDetail> AkbtransactionDetails { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -39,11 +39,11 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbadmin>(entity =>
             {
                 entity.HasKey(e => e.AdminId)
-                    .HasName("PK__AKBAdmin__719FE48811536A10");
+                    .HasName("PK__AKBAdmin__719FE48817A57532");
 
                 entity.ToTable("AKBAdmin");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__A9D1053432BD368C")
+                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__A9D105346B883945")
                     .IsUnique();
 
                 entity.Property(e => e.Email)
@@ -65,11 +65,11 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbcustomer>(entity =>
             {
                 entity.HasKey(e => e.CustomerId)
-                    .HasName("PK__AKBCusto__A4AE64D8E2210672");
+                    .HasName("PK__AKBCusto__A4AE64D8BA4CFC1D");
 
                 entity.ToTable("AKBCustomer");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBCusto__A9D10534C47C9CEC")
+                entity.HasIndex(e => e.Email, "UQ__AKBCusto__A9D10534098B4FD5")
                     .IsUnique();
 
                 entity.Property(e => e.Email)
@@ -91,7 +91,7 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbmovie>(entity =>
             {
                 entity.HasKey(e => e.MovieId)
-                    .HasName("PK__AKBMovie__4BD2941A632096FA");
+                    .HasName("PK__AKBMovie__4BD2941AE8E42AA9");
 
                 entity.ToTable("AKBMovie");
 
@@ -148,27 +148,27 @@ namespace BookMyMovie_Angular_Backend.Models
                     .WithMany(p => p.AkbseatMaps)
                     .HasForeignKey(d => d.MovieId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AKBSeatMa__Movie__415A6496");
+                    .HasConstraintName("FK__AKBSeatMa__Movie__64A3A0D3");
             });
 
-            modelBuilder.Entity<Akbtdet>(entity =>
+            modelBuilder.Entity<AkbtransactionDetail>(entity =>
             {
                 entity.HasKey(e => e.TransactionId)
-                    .HasName("PK__AKBTDet__55433A6B82A5DF11");
+                    .HasName("PK__AKBTrans__55433A6B55B7A774");
 
-                entity.ToTable("AKBTDet");
+                entity.ToTable("AKBTransactionDetails");
 
                 entity.Property(e => e.TransactionTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.Akbtdets)
+                    .WithMany(p => p.AkbtransactionDetails)
                     .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK__AKBTDet__Custome__452AF57A");
+                    .HasConstraintName("FK__AKBTransa__Custo__687431B7");
 
                 entity.HasOne(d => d.Movie)
-                    .WithMany(p => p.Akbtdets)
+                    .WithMany(p => p.AkbtransactionDetails)
                     .HasForeignKey(d => d.MovieId)
-                    .HasConstraintName("FK__AKBTDet__MovieId__461F19B3");
+                    .HasConstraintName("FK__AKBTransa__Movie__696855F0");
             });
 
             OnModelCreatingPartial(modelBuilder);
