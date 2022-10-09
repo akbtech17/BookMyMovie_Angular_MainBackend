@@ -29,7 +29,55 @@ namespace BookMyMovie_Angular_Backend.Controllers
 				return BadRequest();
 			}
 		}
-		
+
+		[HttpGet]
+		[Route("{transactionId}")]
+		public IActionResult GetTransactionByTId(int transactionId) {
+			try
+			{
+				TransactionResponse transactionResponse = new TransactionResponse();
+
+				AkbtransactionDetail transactionDetails = db.AkbtransactionDetails.FirstOrDefault(transaction => transaction.TransactionId == transactionId);
+				transactionResponse.TransactionTime = transactionDetails.TransactionTime;
+				transactionResponse.TransactionId = transactionDetails.TransactionId;
+
+
+				Akbmovie movieDetails = db.Akbmovies.FirstOrDefault(movie => movie.MovieId == transactionDetails.MovieId);
+				transactionResponse.MovieId = movieDetails.MovieId;
+				transactionResponse.MovieName = movieDetails.MovieName;
+				transactionResponse.ReleaseDate = movieDetails.ReleaseDate;
+				transactionResponse.Ratings = movieDetails.Ratings;
+				transactionResponse.Genres = movieDetails.Genres;
+				transactionResponse.ImageUrl = movieDetails.ImageUrl;
+				transactionResponse.CostPerSeat = movieDetails.CostPerSeat;
+				transactionResponse.ShowTime = movieDetails.ShowTime;
+				transactionResponse.Duration = movieDetails.Duration;
+				transactionResponse.AgeRating = movieDetails.AgeRating;
+				transactionResponse.Language = movieDetails.Language;
+				transactionResponse.MovieType = movieDetails.MovieType;
+
+				Akbcustomer customerDetails = db.Akbcustomers.FirstOrDefault(customer => customer.CustomerId == transactionDetails.CustomerId);
+				transactionResponse.CustomerId = customerDetails.CustomerId;
+				transactionResponse.Email = customerDetails.Email;
+				transactionResponse.FirstName = customerDetails.FirstName;
+
+				List<AkbtransactionSeat> tranSeats = db.AkbtransactionSeats.Where(ts => ts.TransactionId == transactionId).ToList();
+				transactionResponse.Seats = new string[tranSeats.Count];
+				int cnt = 0;
+				foreach (AkbtransactionSeat seat in tranSeats)
+				{
+					transactionResponse.Seats[cnt++] = seat.SeatNo;
+				}
+
+				transactionResponse.TotalCost = cnt * transactionResponse.CostPerSeat;
+				return Ok(transactionResponse);
+			}
+			catch (Exception ex) 
+			{
+				return BadRequest();
+			}
+			return Ok();
+		}
 
 		[HttpPost]
 		[Route("")]
@@ -77,6 +125,34 @@ namespace BookMyMovie_Angular_Backend.Controllers
 		public int CustomerId { get; set; }
 		public DateTime TransactionTime { get; set; }
 		public string[] Seats { get; set; }
+	}
+
+	public class TransactionResponse
+	{
+		public int? TransactionId { get; set; }
+		public DateTime TransactionTime { get; set; }
+		public string[] Seats { get; set; }
+
+		public int? TotalCost { get; set; }
+
+		public int? CustomerId { get; set; }
+		public string Email { get; set; }
+		public string FirstName { get; set; }
+
+
+		public int? MovieId { get; set; }
+		public string MovieName { get; set; }
+		public DateTime? ReleaseDate { get; set; }
+		public int? Ratings { get; set; }
+		public string Genres { get; set; }
+		public string ImageUrl { get; set; }
+		public int? CostPerSeat { get; set; }
+		public DateTime? ShowTime { get; set; }
+		public string Duration { get; set; }
+		public string AgeRating { get; set; }
+		public string Language { get; set; }
+		public string MovieType { get; set; }
+
 	}
 }
 
