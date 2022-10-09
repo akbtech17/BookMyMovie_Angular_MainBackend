@@ -74,9 +74,8 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			}
 			catch (Exception ex) 
 			{
-				return BadRequest();
+				return BadRequest(ex.InnerException.Message);
 			}
-			return Ok();
 		}
 
 		public TransactionResponse HelpPostTransaction(int? transactionId)
@@ -120,7 +119,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 				transactionResponse.TotalCost = cnt * transactionResponse.CostPerSeat;
 				return transactionResponse;
 			}
-			catch (Exception ex)
+			catch ()
 			{
 				return null;
 			}
