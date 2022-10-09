@@ -12,7 +12,7 @@ namespace BookMyMovie_Angular_Backend.Models
             AkbtransactionDetails = new HashSet<AkbtransactionDetail>();
         }
 
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
