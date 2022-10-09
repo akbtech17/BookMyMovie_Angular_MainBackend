@@ -119,7 +119,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 				transactionResponse.TotalCost = cnt * transactionResponse.CostPerSeat;
 				return transactionResponse;
 			}
-			catch ()
+			catch (Exception ex)
 			{
 				return null;
 			}
