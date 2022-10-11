@@ -40,11 +40,11 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbadmin>(entity =>
             {
                 entity.HasKey(e => e.AdminId)
-                    .HasName("PK__AKBAdmin__719FE4883E8538D8");
+                    .HasName("PK__AKBAdmin__719FE488E27A3532");
 
                 entity.ToTable("AKBAdmin");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__A9D10534394C6107")
+                entity.HasIndex(e => e.Email, "UQ__AKBAdmin__A9D105348100E3AA")
                     .IsUnique();
 
                 entity.Property(e => e.Email)
@@ -66,11 +66,11 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbcustomer>(entity =>
             {
                 entity.HasKey(e => e.CustomerId)
-                    .HasName("PK__AKBCusto__A4AE64D8E9D71D1B");
+                    .HasName("PK__AKBCusto__A4AE64D8B2A9F7E7");
 
                 entity.ToTable("AKBCustomer");
 
-                entity.HasIndex(e => e.Email, "UQ__AKBCusto__A9D10534ACEEB416")
+                entity.HasIndex(e => e.Email, "UQ__AKBCusto__A9D105343780B900")
                     .IsUnique();
 
                 entity.Property(e => e.Email)
@@ -92,7 +92,7 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<Akbmovie>(entity =>
             {
                 entity.HasKey(e => e.MovieId)
-                    .HasName("PK__AKBMovie__4BD2941AD9346BE8");
+                    .HasName("PK__AKBMovie__4BD2941ACA0E813A");
 
                 entity.ToTable("AKBMovie");
 
@@ -113,6 +113,8 @@ namespace BookMyMovie_Angular_Backend.Models
                 entity.Property(e => e.ImageUrl)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.IsAdult).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Language)
                     .HasMaxLength(10)
@@ -135,7 +137,7 @@ namespace BookMyMovie_Angular_Backend.Models
             modelBuilder.Entity<AkbseatMap>(entity =>
             {
                 entity.HasKey(e => e.SeatId)
-                    .HasName("PK__AKBSeatM__311713F36049FE97");
+                    .HasName("PK__AKBSeatM__311713F3BDA80A49");
 
                 entity.ToTable("AKBSeatMap");
 
@@ -149,13 +151,13 @@ namespace BookMyMovie_Angular_Backend.Models
                 entity.HasOne(d => d.Movie)
                     .WithMany(p => p.AkbseatMaps)
                     .HasForeignKey(d => d.MovieId)
-                    .HasConstraintName("FK__AKBSeatMa__Movie__3A98586E");
+                    .HasConstraintName("FK__AKBSeatMa__Movie__2197A07A");
             });
 
             modelBuilder.Entity<AkbtransactionDetail>(entity =>
             {
                 entity.HasKey(e => e.TransactionId)
-                    .HasName("PK__AKBTrans__55433A6BB09B5E3C");
+                    .HasName("PK__AKBTrans__55433A6B20405EB6");
 
                 entity.ToTable("AKBTransactionDetails");
 
@@ -164,12 +166,12 @@ namespace BookMyMovie_Angular_Backend.Models
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.AkbtransactionDetails)
                     .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK__AKBTransa__Custo__3E68E952");
+                    .HasConstraintName("FK__AKBTransa__Custo__2568315E");
 
                 entity.HasOne(d => d.Movie)
                     .WithMany(p => p.AkbtransactionDetails)
                     .HasForeignKey(d => d.MovieId)
-                    .HasConstraintName("FK__AKBTransa__Movie__3F5D0D8B");
+                    .HasConstraintName("FK__AKBTransa__Movie__265C5597");
             });
 
             modelBuilder.Entity<AkbtransactionSeat>(entity =>
@@ -187,7 +189,7 @@ namespace BookMyMovie_Angular_Backend.Models
                     .WithMany(p => p.AkbtransactionSeats)
                     .HasForeignKey(d => d.TransactionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AKBTransa__Trans__42397A36");
+                    .HasConstraintName("FK__AKBTransa__Trans__2938C242");
             });
 
             OnModelCreatingPartial(modelBuilder);
