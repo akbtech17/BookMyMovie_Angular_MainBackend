@@ -80,7 +80,8 @@ namespace BookMyMovie_Angular_Backend.Controllers
                     movieOldDetails.AgeRating = movieDetails.AgeRating;
                     movieOldDetails.Language = movieDetails.Language;
                     movieOldDetails.MovieType = movieDetails.MovieType;
-                }
+                    movieOldDetails.IsAdult = movieDetails.IsAdult;
+				}
                 db.SaveChanges();
                 return Ok();
             }
