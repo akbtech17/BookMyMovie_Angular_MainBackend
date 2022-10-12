@@ -97,6 +97,16 @@ namespace BookMyMovie_Angular_Backend.Controllers
 		{
 			try
 			{
+                // check the transaction
+                AkbtransactionDetail transactionDetail = db.AkbtransactionDetails.Where(t => t.MovieId == id).FirstOrDefault();
+                if (transactionDetail != null) return BadRequest("Can't delete as there are transactions associated with this movie");
+                // remove seats 
+                List<AkbseatMap> movieSeats = db.AkbseatMaps.Where(s => s.MovieId == id).ToList();
+                foreach (AkbseatMap akbseat in movieSeats)
+                {
+                    db.AkbseatMaps.Remove(akbseat);
+                }
+                db.SaveChanges();
 				Akbmovie movieDetails = db.Akbmovies
 					.Where(m => m.MovieId == id)
 					.FirstOrDefault();
