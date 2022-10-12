@@ -23,6 +23,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 				customer1.Email = "akb.tech17@gmail.com";
 				customer1.Password = "12@usT34";
 				customer1.FirstName = "Anshul";
+				customer1.Gender = "Male";
 				customerController.Register(customer1);
 			}
 			catch (Exception ex)
