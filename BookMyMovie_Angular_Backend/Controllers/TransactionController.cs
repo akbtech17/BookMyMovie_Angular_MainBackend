@@ -131,9 +131,13 @@ namespace BookMyMovie_Angular_Backend.Controllers
 		{
 			try
 			{
+				Guid guid = Guid.NewGuid();
+				Random random = new Random();
+				int tId = random.Next();
+
 				// 1. post transaction details to transaction table
 				AkbtransactionDetail transactionDetails = new AkbtransactionDetail();
-				transactionDetails.TransactionId = null;
+				transactionDetails.TransactionId = tId;
 				transactionDetails.MovieId = transactionRequest.MovieId;
 				transactionDetails.CustomerId = transactionRequest.CustomerId;
 				transactionDetails.TransactionTime = transactionRequest.TransactionTime;
@@ -141,10 +145,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 				db.SaveChanges();
 
 				// 2. post transaction seats details to seat table
-				int? transactionId = db.AkbtransactionDetails.Where(t =>
-				t.MovieId == transactionRequest.MovieId &&
-				t.CustomerId == transactionRequest.CustomerId &&
-				t.TransactionTime.Equals(transactionRequest.TransactionTime)).FirstOrDefault().TransactionId;
+				int? transactionId = tId;
 
 				if (transactionId != null) {
 					foreach (string seat in transactionRequest.Seats)
