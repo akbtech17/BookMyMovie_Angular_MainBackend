@@ -29,7 +29,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			{
 				return BadRequest(ex.InnerException.Message);
 			}
-			return Ok("Anshika have set the Database\n" +
+			return Ok("Anshul have set the Database\n" +
 				"Keep Working\n" +
 				"All the Best");
 		}
