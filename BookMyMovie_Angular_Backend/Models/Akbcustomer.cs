@@ -16,6 +16,7 @@ namespace BookMyMovie_Angular_Backend.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
+        public string Gender { get; set; }
 
         public virtual ICollection<AkbtransactionDetail> AkbtransactionDetails { get; set; }
     }
