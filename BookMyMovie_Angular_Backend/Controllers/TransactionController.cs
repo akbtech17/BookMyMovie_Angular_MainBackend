@@ -15,6 +15,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 	public class TransactionController : ControllerBase
 	{
 		Db01Context db = new Db01Context();
+		public static string connAzureStorage = "DefaultEndpointsProtocol=https;AccountName=anshulkumarstorage256;AccountKey=PEdBR+R7xlLxZdCrfCmURzVlWLYEUlpmkGdGJP9diqkcyN9uIfxB9ZHnx3L481ULKBYnOMznHlgA+AStix+Sjg==;EndpointSuffix=core.windows.net";
 
 		[HttpGet]
 		[Route("")]
@@ -156,6 +157,25 @@ namespace BookMyMovie_Angular_Backend.Controllers
 						db.SaveChanges();
 					}
 				}
+
+
+				// post to azure
+				Akbcustomer customer = db.Akbcustomers.Where(c => c.CustomerId == transactionRequest.CustomerId).FirstOrDefault();
+				Akbmovie movie = db.Akbmovies.Where(m => m.MovieId == transactionRequest.MovieId).FirstOrDefault();
+				string seatsBooked = "";
+				for (int i = 0; i < transactionRequest.Seats.Length; i++)
+				{
+					seatsBooked += transactionRequest.Seats[i];
+					if (i + 1 < transactionRequest.Seats.Length) seatsBooked += ", ";
+				}
+				string message = $"Name : {customer.FirstName}\n" +
+					$"Email : {customer.Email}\n" +
+					$"Seat No : {seatsBooked}\n" +
+					$"No of Seats : {transactionRequest.Seats.Length}\n" +
+					$"Total Cost : {transactionRequest.Seats.Length*movie.CostPerSeat}\n" +
+					$"Movie Name : {movie.MovieName}\n" +
+					$"Show Time : {movie.ShowTime}";
+				AddMessageToQueue(message);
 				return Ok(HelpPostTransaction(transactionId));
 			}
 			catch (Exception ex)
@@ -164,6 +184,15 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			}
 			
 			
+		}
+
+		public static void AddMessageToQueue(string message)
+		{
+			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connAzureStorage);
+			CloudQueueClient cloudQueueClient = storageAccount.CreateCloudQueueClient();
+			CloudQueue cloudQueue = cloudQueueClient.GetQueueReference("transactions");
+			CloudQueueMessage queueMessage = new CloudQueueMessage(message);
+			cloudQueue.AddMessageAsync(queueMessage);
 		}
 	}
 	public class TransactionRequest 
@@ -206,7 +235,6 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
 
 
-//public static string connAzureStorage = "DefaultEndpointsProtocol=https;AccountName=anshulkumarstorage256;AccountKey=PEdBR+R7xlLxZdCrfCmURzVlWLYEUlpmkGdGJP9diqkcyN9uIfxB9ZHnx3L481ULKBYnOMznHlgA+AStix+Sjg==;EndpointSuffix=core.windows.net";
 
 //	[HttpPost]
 //	[Route("")]
@@ -236,14 +264,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 //		return Ok();
 //	}
 
-//	public static void AddMessageToQueue(string message) 
-//	{
-//		CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connAzureStorage);
-//		CloudQueueClient cloudQueueClient = storageAccount.CreateCloudQueueClient();
-//		CloudQueue cloudQueue = cloudQueueClient.GetQueueReference("transactions");
-//		CloudQueueMessage queueMessage = new CloudQueueMessage(message);
-//		cloudQueue.AddMessageAsync(queueMessage);
-//	}
+
 
 //public class TransactionDetails 
 //{
