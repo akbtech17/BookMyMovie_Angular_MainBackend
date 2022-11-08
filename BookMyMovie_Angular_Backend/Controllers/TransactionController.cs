@@ -194,6 +194,27 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			CloudQueueMessage queueMessage = new CloudQueueMessage(message);
 			cloudQueue.AddMessageAsync(queueMessage);
 		}
+
+		[HttpGet]
+		[Route("cid/{customerId}")]
+		public IActionResult GetTransactionsByCustomerId(int customerId) {
+			try
+			{
+				List<AkbtransactionDetail> transactions = db.AkbtransactionDetails.Where(transaction => transaction.CustomerId == customerId).ToList();
+				List<TransactionResponse> response = new List<TransactionResponse>();
+
+				foreach (AkbtransactionDetail transaction in transactions)
+				{
+					response.Add(HelpPostTransaction(transaction.TransactionId));
+				}
+
+				return Ok(response);
+			}
+			catch (Exception ex) 
+			{
+				return BadRequest();		
+			}
+		}
 	}
 	public class TransactionRequest 
 	{
