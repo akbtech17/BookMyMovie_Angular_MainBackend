@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace BookMyMovie_Angular_Backend.Controllers
 {
@@ -186,6 +187,34 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			
 		}
 
+		[HttpDelete]
+		[Route("{transactionId}")]
+		public IActionResult DeleteTransaction(int? transactionId) {
+			try
+			{
+				AkbtransactionDetail transaction = db.AkbtransactionDetails.Where(transaction => transaction.TransactionId == transactionId).FirstOrDefault();
+				List<AkbtransactionSeat> transactionSeats = db.AkbtransactionSeats.Where(transactionSeat => transactionSeat.TransactionId == transactionId).ToList();	
+				// 1. delete transaction seats details to seat table
+				if (transactionId != null)
+				{
+					foreach (AkbtransactionSeat seat in transactionSeats)
+					{
+						db.AkbtransactionSeats.Remove(seat);
+						AkbseatMap akbseatMap = db.AkbseatMaps.Where(sm => sm.MovieId == transaction.MovieId && sm.SeatNo.Equals(seat.SeatNo)).FirstOrDefault();
+						akbseatMap.Status = 0;
+						db.SaveChanges();
+					}
+				}
+				db.AkbtransactionDetails.Remove(transaction);
+				db.SaveChanges();
+				return Ok();
+			}
+			catch (Exception ex) 
+			{
+				return BadRequest(ex.InnerException.Message);
+			}
+		}
+
 		public static void AddMessageToQueue(string message)
 		{
 			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connAzureStorage);
@@ -253,50 +282,3 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
 	}
 }
-
-
-
-
-//	[HttpPost]
-//	[Route("")]
-//	public IActionResult CreateTransaction(TransactionDetails transactionDetails)
-//	{
-//		try
-//		{
-//			string seatsBooked = "";
-//			for (int i = 0; i < transactionDetails.selectedSeats.Length; i++)
-//			{
-//				seatsBooked+=transactionDetails.selectedSeats[i];
-//				if (i + 1 < transactionDetails.selectedSeats.Length) seatsBooked+= ", ";
-//			}
-//			string message = $"Name : {transactionDetails.firstName}\n" +
-//				$"Email : {transactionDetails.email}\n" +
-//				$"Seat No : {seatsBooked}\n" +
-//				$"No of Seats : {transactionDetails.noOfSelectedSeats}\n" +
-//				$"Total Cost : {transactionDetails.totalCost}\n" +
-//				$"Movie Name : {transactionDetails.movieName}\n" +
-//				$"Show Time : {transactionDetails.showTime}";
-//			AddMessageToQueue(message);
-//		}
-//		catch (Exception ex) 
-//		{
-//			return BadRequest(ex.InnerException.Message);
-//		}
-//		return Ok();
-//	}
-
-
-
-//public class TransactionDetails 
-//{
-//	public string firstName { get; set; }
-//	public string email { get; set; }
-//	public int movieId { get; set; }
-//	public string movieName { get; set; }
-//	public DateTime showTime { get; set; }
-//	public int seatCost { get; set; }
-//	public string[] selectedSeats { get; set; }
-//	public int noOfSelectedSeats { get; set; }
-//	public int totalCost { get; set; }
-
-//}
