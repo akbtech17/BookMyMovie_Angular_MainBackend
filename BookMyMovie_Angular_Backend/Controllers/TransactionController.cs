@@ -193,7 +193,9 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			try
 			{
 				AkbtransactionDetail transaction = db.AkbtransactionDetails.Where(transaction => transaction.TransactionId == transactionId).FirstOrDefault();
-				List<AkbtransactionSeat> transactionSeats = db.AkbtransactionSeats.Where(transactionSeat => transactionSeat.TransactionId == transactionId).ToList();	
+				List<AkbtransactionSeat> transactionSeats = db.AkbtransactionSeats.Where(transactionSeat => transactionSeat.TransactionId == transactionId).ToList();
+				Akbcustomer customer = db.Akbcustomers.Where(customer => customer.CustomerId == transaction.CustomerId).FirstOrDefault();
+				Akbmovie movie = db.Akbmovies.Where(movie => movie.MovieId == transaction.MovieId).FirstOrDefault();
 				// 1. delete transaction seats details to seat table
 				if (transactionId != null)
 				{
@@ -205,8 +207,24 @@ namespace BookMyMovie_Angular_Backend.Controllers
 						db.SaveChanges();
 					}
 				}
+				string seatsBooked = "";
+				foreach (AkbtransactionSeat seat in transactionSeats)
+				{
+					if (!seatsBooked.Equals("")) seatsBooked += ", ";
+					seatsBooked += seat.SeatNo;
+				}
+				
 				db.AkbtransactionDetails.Remove(transaction);
 				db.SaveChanges();
+				string message = $"Name : {customer.FirstName}\n" +
+					"Message : Booking Cancelled Successfully\n" +
+					$"Email : {customer.Email}\n" +
+					$"Seat No : {seatsBooked}\n" +
+					$"Transaction Id : {transactionId}\n" +
+					$"Refund Cost : {transactionSeats.Count * movie.CostPerSeat}\n" +
+					$"Movie Name : {movie.MovieName}\n" +
+					$"Show Time : {movie.ShowTime}";
+				AddMessageToQueue(message);
 				return Ok();
 			}
 			catch (Exception ex) 
