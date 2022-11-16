@@ -184,20 +184,20 @@ namespace BookMyMovie_Angular_Backend.Controllers
 
 				int? totalCost = transactionRequest.Seats.Length * movie.CostPerSeat;
 
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://business-scenario.azurewebsites.net/api/CaptureHttpRequest?code=u-nM6QTdMX8kutwO4XW-nOEDoYKHbTwDssPSVp1ImG1tAzFuZuguiQ==");
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("https://business-scenario.azurewebsites.net/api/CaptureHttpRequest?code=u-nM6QTdMX8kutwO4XW-nOEDoYKHbTwDssPSVp1ImG1tAzFuZuguiQ==");
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "POST";
 
-                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                using (StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
-					string json = ConstructJson(customer.FirstName, customer.Email, movie.MovieName, transactionRequest.Seats.Length.ToString(), totalCost.ToString(), transactionRequest.TransactionTime.ToString(), movie.ShowTime.ToString(), seatsBooked);
+					string json = ConstructJson(customer.FirstName, customer.Email, movie.MovieName, transactionRequest.Seats.Length.ToString(), totalCost.ToString(), transactionRequest.TransactionTime.ToString(), movie.ShowTime.ToString(), seatsBooked, "BCNF");
                     streamWriter.Write(json);
                 }
 
-                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    var result = streamReader.ReadToEnd();
+                    string result = streamReader.ReadToEnd();
                 }
 
                 return Ok(HelpPostTransaction(transactionId));
@@ -210,10 +210,10 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			
 		}
 
-		public static string ConstructJson(string name, string email, string movie, string ticket, string cost, string ttime, string stime, string seatNos) { 
+		public static string ConstructJson(string name, string email, string movie, string ticket, string cost, string ttime, string stime, string seatNos, string message) { 
 			string json  = "{\"name\":\""+name+"\"," +
 				"\"email\":\""+email+"\"," +
-				"\"message\":\""+"BCNF"+"\"," +
+				"\"message\":\""+message+"\"," +
 				"\"movie\":\""+movie+"\"," +
 				"\"ticket\":\""+ticket+"\"," +
 				"\"cost\":\""+cost+"\"," +
@@ -252,7 +252,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 				
 				db.AkbtransactionDetails.Remove(transaction);
 				db.SaveChanges();
-				string message = $"Name : {customer.FirstName}\n" +
+                /*string message = $"Name : {customer.FirstName}\n" +
 					"Message : Booking Cancelled Successfully\n" +
 					$"Email : {customer.Email}\n" +
 					$"Seat No : {seatsBooked}\n" +
@@ -260,8 +260,26 @@ namespace BookMyMovie_Angular_Backend.Controllers
 					$"Refund Cost : {transactionSeats.Count * movie.CostPerSeat}\n" +
 					$"Movie Name : {movie.MovieName}\n" +
 					$"Show Time : {movie.ShowTime}";
-				AddMessageToQueue(message);
-				return Ok();
+				AddMessageToQueue(message);*/
+
+                int? totalCost = transactionSeats.Count * movie.CostPerSeat;
+
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("https://business-scenario.azurewebsites.net/api/CaptureHttpRequest?code=u-nM6QTdMX8kutwO4XW-nOEDoYKHbTwDssPSVp1ImG1tAzFuZuguiQ==");
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "POST";
+
+                using (StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    string json = ConstructJson(customer.FirstName, customer.Email, movie.MovieName, transactionSeats.Count.ToString(), totalCost.ToString(), transaction.TransactionTime.ToString(), movie.ShowTime.ToString(), seatsBooked, "BCNL");
+                    streamWriter.Write(json);
+                }
+
+                HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    string result = streamReader.ReadToEnd();
+                }
+                return Ok();
 			}
 			catch (Exception ex) 
 			{
