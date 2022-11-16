@@ -6,7 +6,10 @@ using Microsoft.WindowsAzure.Storage.Queue;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 
 namespace BookMyMovie_Angular_Backend.Controllers
@@ -169,15 +172,35 @@ namespace BookMyMovie_Angular_Backend.Controllers
 					seatsBooked += transactionRequest.Seats[i];
 					if (i + 1 < transactionRequest.Seats.Length) seatsBooked += ", ";
 				}
-				string message = $"Name : {customer.FirstName}\n" +
+
+				/*string message = $"Name : {customer.FirstName}\n" +
 					$"Email : {customer.Email}\n" +
 					$"Seat No : {seatsBooked}\n" +
 					$"No of Seats : {transactionRequest.Seats.Length}\n" +
-					$"Total Cost : {transactionRequest.Seats.Length*movie.CostPerSeat}\n" +
+					$"Total Cost : {}\n" +
 					$"Movie Name : {movie.MovieName}\n" +
 					$"Show Time : {movie.ShowTime}";
-				AddMessageToQueue(message);
-				return Ok(HelpPostTransaction(transactionId));
+				AddMessageToQueue(message);*/
+
+				int? totalCost = transactionRequest.Seats.Length * movie.CostPerSeat;
+
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://business-scenario.azurewebsites.net/api/CaptureHttpRequest?code=u-nM6QTdMX8kutwO4XW-nOEDoYKHbTwDssPSVp1ImG1tAzFuZuguiQ==");
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "POST";
+
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+					string json = ConstructJson(customer.FirstName, customer.Email, movie.MovieName, transactionRequest.Seats.Length.ToString(), totalCost.ToString(), transactionRequest.TransactionTime.ToString(), movie.ShowTime.ToString(), seatsBooked);
+                    streamWriter.Write(json);
+                }
+
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                }
+
+                return Ok(HelpPostTransaction(transactionId));
 			}
 			catch (Exception ex)
 			{
@@ -185,6 +208,19 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			}
 			
 			
+		}
+
+		public static string ConstructJson(string name, string email, string movie, string ticket, string cost, string ttime, string stime, string seatNos) { 
+			string json  = "{\"name\":\""+name+"\"," +
+				"\"email\":\""+email+"\"," +
+				"\"message\":\""+"BCNF"+"\"," +
+				"\"movie\":\""+movie+"\"," +
+				"\"ticket\":\""+ticket+"\"," +
+				"\"cost\":\""+cost+"\"," +
+				"\"transactionTime\":\""+ttime+"\"," +
+				"\"showTime\":\""+stime+"\"," +
+				"\"seatNos\":\""+seatNos+"\"}";
+			return json;
 		}
 
 		[HttpDelete]
