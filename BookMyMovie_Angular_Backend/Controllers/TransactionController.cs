@@ -173,14 +173,7 @@ namespace BookMyMovie_Angular_Backend.Controllers
 					if (i + 1 < transactionRequest.Seats.Length) seatsBooked += ", ";
 				}
 
-				/*string message = $"Name : {customer.FirstName}\n" +
-					$"Email : {customer.Email}\n" +
-					$"Seat No : {seatsBooked}\n" +
-					$"No of Seats : {transactionRequest.Seats.Length}\n" +
-					$"Total Cost : {}\n" +
-					$"Movie Name : {movie.MovieName}\n" +
-					$"Show Time : {movie.ShowTime}";
-				AddMessageToQueue(message);*/
+
 
 				int? totalCost = transactionRequest.Seats.Length * movie.CostPerSeat;
 
@@ -252,15 +245,6 @@ namespace BookMyMovie_Angular_Backend.Controllers
 				
 				db.AkbtransactionDetails.Remove(transaction);
 				db.SaveChanges();
-                /*string message = $"Name : {customer.FirstName}\n" +
-					"Message : Booking Cancelled Successfully\n" +
-					$"Email : {customer.Email}\n" +
-					$"Seat No : {seatsBooked}\n" +
-					$"Transaction Id : {transactionId}\n" +
-					$"Refund Cost : {transactionSeats.Count * movie.CostPerSeat}\n" +
-					$"Movie Name : {movie.MovieName}\n" +
-					$"Show Time : {movie.ShowTime}";
-				AddMessageToQueue(message);*/
 
                 int? totalCost = transactionSeats.Count * movie.CostPerSeat;
 
@@ -287,14 +271,6 @@ namespace BookMyMovie_Angular_Backend.Controllers
 			}
 		}
 
-		public static void AddMessageToQueue(string message)
-		{
-			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connAzureStorage);
-			CloudQueueClient cloudQueueClient = storageAccount.CreateCloudQueueClient();
-			CloudQueue cloudQueue = cloudQueueClient.GetQueueReference("transactions");
-			CloudQueueMessage queueMessage = new CloudQueueMessage(message);
-			cloudQueue.AddMessageAsync(queueMessage);
-		}
 
 		[HttpGet]
 		[Route("cid/{customerId}")]
